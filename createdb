@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if (( "$#" != 1 ))
+then
+	echo "Usage: ${0##*/} databasename (e.g. ${0##*/} mysite.co.uk)"
+	exit 1
+fi
+
+/Applications/MAMP/Library/bin/mysql --user=root --password=root -e "CREATE DATABASE IF NOT EXISTS \`$1\`;"
+
+echo Database created.

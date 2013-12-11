@@ -1,0 +1,12 @@
+#!/bin/sh
+
+find . -name "*" -delete
+
+if (( "$#" == 1 ))
+then
+	svn co http://core.svn.wordpress.org/branches/$1/ .
+	echo Wordpress $1 installed.
+else
+	svn co http://core.svn.wordpress.org/trunk/ .
+	echo Wordpress installed.
+fi

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+DEST=$(datestamp)
+echo Exporting database...
+exportdb $1
+echo Creating snapshot...
+cp -r /users/mbutleruk/dropbox/sites/$1 /users/mbutleruk/desktop/$1-$DEST
+echo Snapshot created.
+echo
+

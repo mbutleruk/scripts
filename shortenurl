@@ -1,0 +1,4 @@
+link=$(curl http://bboo.me/yourls-api.php?signature=67f82d2879\&action=shorturl\&format=simple\&url=$1)
+echo $link
+echo $link | pbcopy
+

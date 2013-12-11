@@ -1,0 +1,5 @@
+#1/bin/sh
+
+find .  -iname '.svn' -type d -exec rm -rf {} \;w
+
+echo SVN removed.

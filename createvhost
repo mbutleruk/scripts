@@ -1,0 +1,46 @@
+#!/bin/sh
+
+if (( "$#" != 2 ))
+then
+	echo "Usage: ${0##*/} localname remotename (e.g. ${0##*/} mysite.dev mysite.co.uk)"
+	exit 1
+fi
+
+LOCALNAME=$1
+REMOTENAME=$2
+ADDRESS="127.0.0.1"
+SITEPATH="$HOME/Dropbox/Sites/$2"
+
+SETTINGSFILE="$HOME/Library/Application Support/appsolute/MAMP PRO/settings.plist"
+HOSTSFILE="$HOME/Library/Application Support/appsolute/MAMP PRO/writtenHosts.plist"
+
+if [[ ! -d "$SITEPATH" ]]; then
+    mkdir "$SITEPATH"
+fi
+
+/usr/libexec/PlistBuddy -c "Add :virtualHosts: dict" "$SETTINGSFILE"
+SETTINGSINDEX=$(/usr/libexec/PlistBuddy -c "Print :virtualHosts: dict" "$SETTINGSFILE" | grep documentRoot | wc -l | tr -d ' ')
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:Allow integer 0" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:AllowOverride integer 0" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:ExecCGI bool false" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:FollowSymLinks bool true" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:Includes bool true" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:Indexes bool false" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:MultiViews bool false" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:Order integer 0" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:SymLinksifOwnerMatch bool false" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:documentRoot string $SITEPATH" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:dyndns dict" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:dyndns:displayName string -" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:local bool true" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:serverAliases array" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:serverName string $LOCALNAME" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :virtualHosts:$SETTINGSINDEX:ssl bool false" "$SETTINGSFILE"
+/usr/libexec/PlistBuddy -c "Add :writtenHosts: array" "$HOSTSFILE"
+HOSTSINDEX=$(/usr/libexec/PlistBuddy -c "Print :writtenHosts: array" "$HOSTSFILE" | grep Array | wc -l | tr -d ' ' | expr $(cat -) - 2)
+/usr/libexec/PlistBuddy -c "Add :writtenHosts:$HOSTSINDEX:0 string $LOCALNAME" "$HOSTSFILE"
+/usr/libexec/PlistBuddy -c "Add :writtenHosts:$HOSTSINDEX:1 string $ADDRESS" "$HOSTSFILE"
+
+restartmamp
+
+Echo Virtual host created.

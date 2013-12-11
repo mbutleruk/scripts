@@ -1,0 +1,42 @@
+#!/bin/bash
+osascript << EOT
+
+set {year:y, month:m, day:d} to current date
+set str to (d as string) & " " & (m as string) & " " & (y as string)
+set today to date str
+set tomorrow to today + 60 * 60 * 24
+set retval to ""
+set newline to (ASCII character 13) & (ASCII character 10)
+
+tell application "Calendar"
+
+	tell calendar "Bamboo"
+
+		set curr to every event whose start date is greater than or equal to today ¬
+			and start date is less than or equal to tomorrow
+		set len to length of curr
+
+		repeat with indx from 1 to len
+
+			set temp to (start date of item indx of curr as text)
+			set AppleScript's text item delimiters to " "
+			set tempTitle to summary of item indx of curr
+			set tempTime to text item 5 of temp
+			set AppleScript's text item delimiters to ":"
+			set newTime to text item 1 of tempTime & ":" & text item 2 of tempTime & "   "
+			if newTime is "00:00   " then set newTime to "All Day "
+			set retval to retval & newTime & tempTitle & newline
+
+		end repeat
+
+	end tell
+
+end tell
+
+if retval = "" then
+	set retval to "No events today"
+end if
+
+return retval
+
+EOT

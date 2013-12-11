@@ -1,0 +1,77 @@
+#!/usr/bin/php
+<?php
+/****************************************************************************************************************/
+
+	$movies_array = array();
+
+	if(!isset($argv[1])) {
+		echo "You must specify a directory\r\n";
+		exit();
+	}
+
+	$movies_root = $argv[1];
+	if ("/" == substr($movies_root, strlen($movies_root)-1, 1)) {
+		$movies_root = substr($movies_root, 0, strlen($movies_root)-1);
+	}
+
+	get_movie_list($movies_root);
+	sort($movies_array);
+	write_movie_list($movies_array);
+
+/****************************************************************************************************************/
+
+	function get_movie_list($directory) {
+
+		if($handle = opendir($directory)) {
+		    while(false !== ($entry = readdir($handle))) {
+		    	if('.' != $entry && '..' != $entry && '.DS_Store' != $entry) {
+			    	$entry_path = $directory . '/' .$entry;
+			    	if(is_dir($entry_path)) {
+			    		get_movie_list($entry_path);
+			    	} else {
+			    		add_movie_to_list($entry);
+			    	}
+		    	}
+		    }
+		    closedir($handle);
+
+		}
+
+	}
+
+/****************************************************************************************************************/
+
+	function add_movie_to_list($entry) {
+
+		global $movies_array;
+
+		$entry = str_replace('.m4v', '', $entry);
+		$entry = str_replace('_', ':', $entry);
+		$entry = str_replace('&', '&amp;', $entry);
+		if("01 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("02 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("03 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("04 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("05 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("06 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("07 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("08 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+		if("09 "==substr($entry, 0, 3 )) $entry = substr($entry, 3, strlen($entry)-3);
+
+		$movies_array[] = $entry;
+
+	}
+
+/****************************************************************************************************************/
+
+	function write_movie_list($array) {
+
+	    $count = sizeof($array);
+	    for ($i = 0; $i < $count; $i++) {
+	    	echo $array[$i]."\r\n";
+	    }
+
+	}
+
+/****************************************************************************************************************/
+?>

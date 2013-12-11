@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if /Applications/MAMP/Library/bin/mysqldump --opt --host=localhost --user=root --password=root $1 > /Users/mbutleruk/Dropbox/Sites/$1/$1.sql
+then
+	echo Database exported.
+else
+	echo Export failed.
+fi

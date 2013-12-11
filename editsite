@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if (( "$#" != 1 ))
+then
+	echo "Usage: ${0##*/} sitename (e.g. ${0##*/} mysite.co.uk)"
+	exit 1
+fi
+
+live=$1
+dev=${live/.co.uk/.dev}
+dev=${dev/.com/.dev}
+dev=${dev/.net/.dev}
+dev=${dev/.org/.dev}
+
+subl $HOME/dropbox/sites/$live
+cd $HOME/dropbox/sites/$live
+open -a /Applications/Firefox.app "http://$dev"

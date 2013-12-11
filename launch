@@ -1,0 +1,7 @@
+if (( "$#" != 1 ))
+then
+	echo "Usage: ${0##*/} application (e.g. ${0##*/} firefox)"
+	exit 1
+fi
+
+open -a "$1"

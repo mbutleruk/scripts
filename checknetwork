@@ -1,0 +1,32 @@
+#!/bin/bash
+
+ping -t3 -o www.google.com &> /dev/null
+if test "${?}" = 0 
+  then
+  exit 0;
+else
+  AIRPORT="en1"; #may be en0, use networksetup -listallhardwareports to check
+  WIFI_NETWORK_NAME="virginmedia1274792"
+  WIFI_PASSWORD="ytpxeqbc"
+  echo 'No connection - restarting Airport'
+  networksetup -setairportpower $AIRPORT off
+  sleep 2
+  networksetup -setairportpower $AIRPORT on
+  sleep 2
+  #if networksetup -getairportnetwork $AIRPORT | grep -i -a $WIFI_NETWORK_NAME ;
+  #then
+  #  echo 'Connected';
+  #  exit 0
+  #fi
+  #if networksetup -setairportnetwork $AIRPORT $WIFI_NETWORK_NAME $WIFI_PASSWORD | grep -i -a "Failed" ;
+  #then
+  #  echo 'Failed to connect - restarting Airport…';
+  #  networksetup -setairportpower $AIRPORT off
+  #  sleep 2
+  #  networksetup -setairportpower $AIRPORT on
+  #  sleep 2
+  #fi
+  #networksetup -getairportnetwork $AIRPORT
+  exit 0;
+fi
+

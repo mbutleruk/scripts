@@ -1,0 +1,3 @@
+#!/bin/bash
+
+listmoviesinfolder /Users/mbutleruk/Music/iTunes/iTunes\ Media/Movies | makelisthtml

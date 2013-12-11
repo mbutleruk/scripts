@@ -1,0 +1,7 @@
+#!/bin/sh
+
+quitapp "mamp pro"
+echo Mamp stopped.
+sleep 3s
+open "/applications/mamp pro/mamp pro.app"
+echo Mamp started.

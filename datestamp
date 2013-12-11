@@ -1,0 +1,4 @@
+#!/bin/sh
+
+TODAY=$(date +"%d.%m.%Y")
+echo $TODAY

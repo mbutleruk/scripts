@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+hour, minute = Time.now.strftime('%I').to_i, Time.now.min
+words = %w{ nil one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour twentyfive twentysix twentyseven twentyeight twentynine }
+
+if(minute > 30) then
+	suffix = 'to'
+	minute = 30 - (minute - 30)
+	hour = hour + 1
+else
+	suffix = 'past'
+end
+
+minute_str = case (minute)
+  when 0 then 'o-clock'
+  when 1 then "#{words[minute]}" + ' minute'
+  when 2..4 then "#{words[minute]}" + ' minutes'
+  when 5 then "#{words[minute]}"
+  when 6..9 then "#{words[minute]}" + ' minutes'
+  when 10 then "#{words[minute]}"
+  when 11..14 then "#{words[minute]}" + ' minutes'
+  when 15 then 'quarter'
+  when 16..19 then "#{words[minute]}" + ' minutes'
+  when 20 then "#{words[minute]}"
+  when 21..24 then "#{words[minute]}" + ' minutes'
+  when 25 then "#{words[minute]}"
+  when 26..29 then "#{words[minute]}" + ' minutes'
+  when 30 then 'half'
+end
+
+
+
+if(hour > 12) then
+	hour = hour - 12
+end
+
+if (minute == 0) then
+	print "#{words[hour]} #{minute_str}\n"
+else
+	print "#{minute_str} #{suffix} #{words[hour]}\n"
+end
+
+# old version
+#minute_str = case minute
+#  when 0 then 'o-clock'
+#  when 1..9 then "o-#{ones[minute]}"
+#  when 10..19 then teens[minute - 10]
+#  else tens[minute.to_s[0,1].to_i] + (minute.to_s[1,1].to_i == 0 ? '' : "-#{ones[minute.to_s[1,1].to_i]}")
+#end
